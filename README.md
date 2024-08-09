@@ -1,16 +1,11 @@
 # annahomestay
 
-A new Flutter project.
+- Developed a cross-platform homestay booking app using Flutter framework.
+- Integrated Firebase for backend services, including user authentication, real-time database management, and booking functionalities.
 
-## Getting Started
+## Some UI
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![adminLogin!](assets/images/adminLogin.png)
+![custHome!](assets/images/custHome.png)
+![custBook!](assets/images/custBook.png)
+![adminApprove!](assets/images/adminApprove.png)
