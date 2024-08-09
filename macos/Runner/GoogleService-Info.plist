@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>425277120843-0g9231ftl748cugq6a37603oasgd5771.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.425277120843-0g9231ftl748cugq6a37603oasgd5771</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>425277120843-psrdr34j19t61q55gi9mb885op56itoe.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAzKTnCKVLXPteRItM4zf-pb9yLuxZTX-g</string>
+	<key>GCM_SENDER_ID</key>
+	<string>425277120843</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.google.firebase.presents.annahomestay.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>annahomestay-ea338</string>
+	<key>STORAGE_BUCKET</key>
+	<string>annahomestay-ea338.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:425277120843:ios:12d97028fec4d0d9d608ce</string>
+</dict>
+</plist>

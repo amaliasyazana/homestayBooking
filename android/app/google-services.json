@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "425277120843",
+    "project_id": "annahomestay-ea338",
+    "storage_bucket": "annahomestay-ea338.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425277120843:android:421e70914eeb843bd608ce",
+        "android_client_info": {
+          "package_name": "com.example.annahomestay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425277120843-psrdr34j19t61q55gi9mb885op56itoe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.annahomestay",
+            "certificate_hash": "06618e0dcfccf99c84d3e412b85a5dd2829621c0"
+          }
+        },
+        {
+          "client_id": "425277120843-8o9igq3agvr9kof659b9t5g5glgdah16.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh2ZTakhcdRWIWYxTZjTa4-u1y6c754Wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425277120843-8o9igq3agvr9kof659b9t5g5glgdah16.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "425277120843-0g9231ftl748cugq6a37603oasgd5771.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.google.firebase.presents.annahomestay.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425277120843:android:bc924e9d108b4e67d608ce",
+        "android_client_info": {
+          "package_name": "com.google.firebase.presents.annahomestay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425277120843-8o9igq3agvr9kof659b9t5g5glgdah16.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh2ZTakhcdRWIWYxTZjTa4-u1y6c754Wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425277120843-8o9igq3agvr9kof659b9t5g5glgdah16.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "425277120843-0g9231ftl748cugq6a37603oasgd5771.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.google.firebase.presents.annahomestay.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
