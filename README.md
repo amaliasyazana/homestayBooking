@@ -5,9 +5,10 @@
 
 ## Some UI
 
-![adminLogin!](assets/images/adminLogin.png)
-![custHome!](assets/images/custHome.png)
-![custBook!](assets/images/custBook.png)
-![adminManage!](assets/images/adminManage.png)
-![adminAdd!](assets/images/adminAdd.png)
-![adminApprove!](assets/images/adminApprove.png)
+- ![adminLogin](assets/images/adminLogin.png)
+- ![custHome](assets/images/custHome.png)
+- ![custBook](assets/images/custBook.png)
+- ![adminManage](assets/images/adminManage.png)
+- ![adminAdd](assets/images/adminAdd.png)
+- ![adminApprove](assets/images/adminApprove.png)
+
