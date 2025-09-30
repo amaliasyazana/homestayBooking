@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../admin/dashboard.dart';
+import '../admin/adminPage.dart';
 import '../user/listScreen.dart';
+import '../user/explorePage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'signupPage.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,10 +15,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static Future<User?> loginUsingEmailPassword(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
+  String? _authError;
+
+  static Future<User?> loginUsingEmailPassword({
+    required String email,
+    required String password,
+    required BuildContext context,
+    required Function(String) onError,
+  }) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
@@ -25,16 +31,22 @@ class _LoginScreenState extends State<LoginScreen> {
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
-        print("No user found for that email");
+        onError("No user found for that email");
+      } else if (e.code == "wrong-password") {
+        onError("Wrong password");
+      } else {
+        onError("Authentication failed");
       }
+    } catch (e) {
+      onError("Authentication failed");
     }
     return user;
   }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
     return SingleChildScrollView(
       child: Padding(
@@ -88,12 +100,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
+            if (_authError != null) ...[
+              const SizedBox(height: 8.0),
+              Text(
+                _authError!,
+                style: const TextStyle(color: Colors.red, fontSize: 16.0),
+              ),
+            ],
             const SizedBox(
               height: 12.0,
-            ),
-            const Text(
-              "Forget password?",
-              style: TextStyle(color: Colors.blue),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -112,23 +127,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ))
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                const Text("Or"),
-                TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => ListScreen()));
-                    },
-                    child: const Text(
-                      "Login as Customer",
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ))
-              ],
-            ),
             const SizedBox(
               height: 88.0,
             ),
@@ -141,15 +139,35 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0)),
                 onPressed: () async {
+                  setState(() {
+                    _authError = null;
+                  });
                   User? user = await loginUsingEmailPassword(
-                      email: _emailController.text,
-                      password: _passwordController.text,
-                      context: context);
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                    context: context,
+                    onError: (msg) {
+                      setState(() {
+                        _authError = msg;
+                      });
+                    },
+                  );
                   print(user);
                   if (user != null) {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) =>
-                            AdminDashboard())); //tukar path pergi admin dashboard ama
+                    try {
+                      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+                      final role = doc.data()?['role'] ?? 'Customer';
+                      if (role == 'Homestay Admin') {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => AdminPage()));
+                      } else {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => ExplorePage()));
+                      }
+                    } catch (e) {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ExplorePage()));
+                    }
                   }
                 },
                 child: const Text(

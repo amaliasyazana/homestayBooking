@@ -14,7 +14,7 @@ class ManageBooking extends StatefulWidget {
 }
 
 class _ManageBookingState extends State<ManageBooking> {
-  //String approvalValue = 'Approved';
+  String? _selectedHomestay;
 
   // Custom method to format timestamp as ddmmyy
   String formatTimestamp(Timestamp timestamp) {
@@ -28,112 +28,134 @@ class _ManageBookingState extends State<ManageBooking> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Manage Customer Booking',
-            style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.indigo[900],
-      ),
-      body: FutureBuilder<List<BookingModel>>(
-          future: controller.getAllBookingDetails(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (c, index) {
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: FutureBuilder<List<BookingModel>>(
+              future: controller.getAllBookingDetails(),
+              builder: (context, snapshot) {
+                List<String> homestayNames = [];
+                if (snapshot.hasData) {
+                  homestayNames = snapshot.data!
+                      .map((b) => b.homestay)
+                      .toSet()
+                      .toList();
+                  homestayNames.sort();
+                }
+                return DropdownButton<String>(
+                  value: _selectedHomestay,
+                  hint: Text('Filter by Homestay'),
+                  items: [
+                    const DropdownMenuItem(value: null, child: Text('All Homestays')),
+                    ...homestayNames.map((name) => DropdownMenuItem(value: name, child: Text(name))).toList(),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedHomestay = value;
+                    });
+                  },
+                  isExpanded: true,
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<BookingModel>>(
+                future: controller.getAllBookingDetails(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final filtered = _selectedHomestay == null || _selectedHomestay == ''
+                        ? snapshot.data!
+                        : snapshot.data!.where((b) => b.homestay == _selectedHomestay).toList();
                     // Sorting order: 'pending', 'Approved', 'Not Approved'
-                    snapshot.data!.sort((a, b) {
-                      if (a.approval == 'pending') {
+                    filtered.sort((a, b) {
+                      if (a.approval == 'pending' || a.approval == 'Pending') {
                         return -1; // 'pending' comes first
-                      } else if (b.approval == 'pending') {
+                      } else if (b.approval == 'pending' || b.approval == 'Pending') {
                         return 1;
-                      } else if (a.approval == 'Approved') {
+                      } else if (a.approval == 'Approved' || a.approval == 'approved') {
                         return -1; // 'Approved' comes next
-                      } else if (b.approval == 'Approved') {
+                      } else if (b.approval == 'Approved' || b.approval == 'approved') {
                         return 1;
                       } else {
                         return 0; // 'Not Approved' comes last
                       }
                     });
-                    Color? cardColor = snapshot.data![index].approval ==
-                            'pending'
-                        ? Colors.red[200]
-                        : snapshot.data![index].approval == 'Approved'
-                            ? Colors.green[200]
-                            : Colors
-                                .white; // Default color if neither Approved nor Not Approved
-                    return SizedBox(
-                        child: Card(
-                      color: cardColor,
-                      margin: const EdgeInsets.all(8.0),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                    return ListView.builder(
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        final booking = filtered[index];
+                        return SizedBox(
+                            child: Card(
+                          margin: const EdgeInsets.all(8.0),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
                                   children: [
-                                    Text(
-                                      snapshot.data![index].homestay,
-                                      style: const TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          booking.homestay,
+                                          style: const TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        // ...other info...
+                                        Text(
+                                          'Approval: ${booking.approval}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: booking.approval ==
+                                                    'pending' || booking.approval == 'Pending'
+                                                ? Colors.orange
+                                                : booking.approval ==
+                                                        'Approved' || booking.approval == 'approved'
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8.0),
+                                        Text('Name: ' + booking.name),
+                                        const SizedBox(height: 8.0),
+                                        Text('Email: ' + booking.email),
+                                        const SizedBox(height: 8.0),
+                                        Text('Phone: ' + booking.phone),
+                                        const SizedBox(height: 8.0),
+                                      ],
                                     ),
-                                    Text(
-                                      snapshot.data![index].approval,
-                                      style: TextStyle(
-                                        color: snapshot.data![index].approval ==
-                                                'Not Approved'
-                                            ? Colors.blue
-                                            : snapshot.data![index].approval ==
-                                                    'Approved'
-                                                ? Colors.green
-                                                : snapshot.data![index]
-                                                            .approval ==
-                                                        'pending'
-                                                    ? Colors.red
-                                                    : null,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8.0),
-                                    Text('Name: ' + snapshot.data![index].name),
-                                    const SizedBox(height: 8.0),
-                                    Text('Email: ' +
-                                        snapshot.data![index].email),
-                                    const SizedBox(height: 8.0),
-                                    Text('Phone: ' +
-                                        snapshot.data![index].phone),
-                                    const SizedBox(height: 8.0),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          if (snapshot.data![index].approval == 'pending')
-                            Positioned(
-                              bottom: 16.0,
-                              right: 16.0,
-                              child: FloatingActionButton.extended(
-                                onPressed: () {
-                                  handleApproval(
-                                      context, snapshot.data![index]);
-                                },
-                                label: const Text('Approval'),
                               ),
-                            ),
-                        ],
-                      ),
-                    ));
-                  });
-            } else if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
+                              if (booking.approval == 'pending')
+                                Positioned(
+                                  bottom: 16.0,
+                                  right: 16.0,
+                                  child: FloatingActionButton.extended(
+                                    onPressed: () {
+                                      handleApproval(context, booking);
+                                    },
+                                    label: const Text('Approval'),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ));
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text(snapshot.error.toString()));
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

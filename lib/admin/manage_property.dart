@@ -23,9 +23,9 @@ class _ManagePropertyState extends State<ManageProperty> {
       appBar: AppBar(
         title: const Text(
           'Manage Property',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.indigo),
         ),
-        backgroundColor: Colors.indigo[800],
+        backgroundColor: Colors.white,
         elevation: 0,
         actions: [
           IconButton(
@@ -56,38 +56,39 @@ class _ManagePropertyState extends State<ManageProperty> {
                       ),
                       Center(
                         child: IconButton(
-                            onPressed: () async {
-                              final file = await ImagePicker()
-                                  .pickImage(source: ImageSource.gallery);
-                              if (file == null) {
-                                return;
-                              }
-                              String fileName = DateTime.now()
-                                  .microsecondsSinceEpoch
-                                  .toString();
+                          onPressed: () async {
+                            final file = await ImagePicker()
+                                .pickImage(source: ImageSource.gallery);
+                            if (file == null) {
+                              return;
+                            }
+                            String fileName = DateTime.now()
+                                .microsecondsSinceEpoch
+                                .toString();
 
-                              Reference referenceRoot =
-                                  FirebaseStorage.instance.ref();
+                            Reference referenceRoot =
+                                FirebaseStorage.instance.ref();
 
-                              Reference referenceDirecImages =
-                                  referenceRoot.child('images');
+                            Reference referenceDirecImages =
+                                referenceRoot.child('images');
 
-                              Reference referenceImageToUpload =
-                                  referenceDirecImages.child(fileName);
+                            Reference referenceImageToUpload =
+                                referenceDirecImages.child(fileName);
 
-                              try {
-                                // Upload image in the background without freezing the UI
-                                await referenceImageToUpload
-                                    .putFile(File(file.path));
+                            try {
+                              // Upload image in the background without freezing the UI
+                              await referenceImageToUpload
+                                  .putFile(File(file.path));
 
-                                imageUrl = await referenceImageToUpload
-                                    .getDownloadURL();
-                              } catch (error) {
-                                // Handle error
-                                print(error.toString());
-                              }
-                            },
-                            icon: const Icon(Icons.camera_alt)),
+                              imageUrl = await referenceImageToUpload
+                                  .getDownloadURL();
+                            } catch (error) {
+                              // Handle error
+                              print(error.toString());
+                            }
+                          },
+                          icon: const Icon(Icons.add_a_photo, color: Colors.indigo),
+                        ),
                       ),
                     ],
                   ),
@@ -116,7 +117,18 @@ class _ManagePropertyState extends State<ManageProperty> {
 
                           HomestayController.instance.createHomestay(homestay);
                         });
+                        // Clear the text fields
+                        controller.name.clear();
+                        controller.capacity.clear();
+                        controller.category.clear();
+                        controller.price.clear();
                         Navigator.pop(context); // Close the dialog
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Property added successfully!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
                       }
                     },
                     child: const Text('Add'),
@@ -130,7 +142,7 @@ class _ManagePropertyState extends State<ManageProperty> {
                   });
             },
             icon: const Icon(Icons.add),
-            color: Colors.white,
+            color: Colors.indigo,
           ),
         ],
       ),
@@ -163,9 +175,14 @@ class _ManagePropertyState extends State<ManageProperty> {
                               // ),
                               Image.network(
                                 snapshot.data![index].imageUrl,
+                                height: 180,
                                 width: double.infinity,
-                                height: 200,
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => Container(
+                                  height: 180,
+                                  color: Colors.grey[300],
+                                  child: const Center(child: Icon(Icons.home, size: 48)),
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
@@ -395,12 +412,35 @@ class _ManagePropertyState extends State<ManageProperty> {
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            setState(() {
-                                              final homestay =
-                                                  snapshot.data![index];
-                                              controller
-                                                  .removeHomestay(homestay);
-                                            });
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                title: const Text('Delete Property'),
+                                                content: const Text('Are you sure you want to delete this property?'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () => Navigator.of(context).pop(),
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        final homestay = snapshot.data![index];
+                                                        controller.removeHomestay(homestay);
+                                                      });
+                                                      Navigator.of(context).pop();
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(
+                                                          content: Text('Property deleted.'),
+                                                          backgroundColor: Colors.red,
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
                                           },
                                           child: const Text(
                                             'Remove',

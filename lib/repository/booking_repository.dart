@@ -95,28 +95,28 @@ class BookingRepository extends GetxController {
     }
   }
 
-// Delete a booking from Firestore
-  // Inside your BookingRepository class
-  Future<void> deleteBooking(String bookingId) async {
-    try {
-      print("Deleting booking with ID: $bookingId");
-      await bookingsCollection.doc(bookingId).delete();
-      Get.snackbar(
-        "Success",
-        "Your booking has been canceled",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.indigo[900],
-        colorText: Colors.white,
-      );
-    } catch (error, stackTrace) {
-      Get.snackbar("Error", "Something went wrong, try again",
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red[400],
-          colorText: Colors.white);
-      print("ERROR - $error");
-      print("STACK TRACE - $stackTrace");
-    }
-  }
+// // Delete a booking from Firestore
+//   // Inside your BookingRepository class
+//   Future<void> deleteBooking(String bookingId) async {
+//     try {
+//       print("Deleting booking with ID: $bookingId");
+//       await bookingsCollection.doc(bookingId).delete();
+//       Get.snackbar(
+//         "Success",
+//         "Your booking has been canceled",
+//         snackPosition: SnackPosition.BOTTOM,
+//         backgroundColor: Colors.indigo[900],
+//         colorText: Colors.white,
+//       );
+//     } catch (error, stackTrace) {
+//       Get.snackbar("Error", "Something went wrong, try again",
+//           snackPosition: SnackPosition.BOTTOM,
+//           backgroundColor: Colors.red[400],
+//           colorText: Colors.white);
+//       print("ERROR - $error");
+//       print("STACK TRACE - $stackTrace");
+//     }
+//   }
 
   // Inside your BookingRepository class
   Stream<List<BookingModel>> getBookings() {

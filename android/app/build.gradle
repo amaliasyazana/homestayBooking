@@ -24,7 +24,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.google.firebase.presents.annahomestay"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34   // ✅ explicitly set
+
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -41,20 +42,16 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.google.firebase.presents.annahomestay"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21        // ✅ upgrade to 21 for Firebase
+        targetSdkVersion 35     // ✅ match latest stable
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true    // ✅ enable multidex
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
     }
@@ -64,4 +61,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation "androidx.multidex:multidex:2.0.1"   // ✅ add this
+}
